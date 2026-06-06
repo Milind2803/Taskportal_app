@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: taskportal
+data:
+  SPRING_PROFILES_ACTIVE: prod
+  DB_URL: "jdbc:mysql://mysql-service:3306/taskportal?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+  DB_USERNAME: appuser

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Task Form – Task Portal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body{background:#f0f2f5;}
+        .btn-primary{background:#1a237e;border-color:#1a237e;}
+        .btn-primary:hover{background:#283593;}
+        .card{border-radius:14px;}
+    </style>
+</head>
+<body>
+<div class="container py-5" style="max-width:600px">
+    <div class="card border-0 shadow-sm p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="mb-0" style="color:#1a237e"
+                th:text="${task.id == null ? '📋 Create Task' : '✏️ Edit Task'}">Task</h5>
+            <a th:href="@{/dashboard}" class="btn btn-sm btn-outline-secondary">← Back</a>
+        </div>
+        <form th:action="@{/tasks/save}" method="post" th:object="${task}">
+            <input type="hidden" th:field="*{id}">
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Title <span class="text-danger">*</span></label>
+                <input type="text" th:field="*{title}" class="form-control" required placeholder="Task title...">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Description</label>
+                <textarea th:field="*{description}" class="form-control" rows="3" placeholder="Optional details..."></textarea>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label class="form-label fw-semibold">Priority</label>
+                    <select th:field="*{priority}" class="form-select">
+                        <option th:each="p : ${priorities}" th:value="${p}" th:text="${p}"></option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select th:field="*{status}" class="form-select">
+                        <option th:each="s : ${statuses}" th:value="${s}"
+                                th:text="${s.name().replace('_',' ')}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Assign To</label>
+                <select name="assignedToId" class="form-select">
+                    <option value="">— Unassigned —</option>
+                    <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.username}"
+                            th:selected="${task.assignedTo != null and task.assignedTo.id == u.id}"></option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Deadline</label>
+                <input type="date" th:field="*{deadline}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2">💾 Save Task</button>
+        </form>
+    </div>
+</div>
+</body></html>
